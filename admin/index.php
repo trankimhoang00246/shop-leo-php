@@ -1,3 +1,7 @@
+<?php 
+include 'navbar.php';
+?>
+
 <?php
 // include database connection
 include '../config/database.php';
