@@ -4,47 +4,6 @@ include '../config/database.php';
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Handle image upload
-    $targetDir = "../assets/img/";
-    $targetFile = $targetDir . basename($_FILES["image"]["name"]);
-    $targetFileData = "assets/img/" . basename($_FILES["image"]["name"]);
-    $uploadOk = 1;
-    $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
-
-    // Check if the image file is a actual image or fake image
-    $check = getimagesize($_FILES["image"]["tmp_name"]);
-    if ($check !== false) {
-        $uploadOk = 1;
-    } else {
-        $uploadOk = 0;
-    }
-
-    // Check if file already exists
-    if (file_exists($targetFile)) {
-        $uploadOk = 0;
-    }
-
-    // Check file size
-    if ($_FILES["image"]["size"] > 500000) {
-        $uploadOk = 0;
-    }
-
-    // Allow certain file formats
-    if (
-        $imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-        && $imageFileType != "gif"
-    ) {
-        $uploadOk = 0;
-    }
-
-    // Check if $uploadOk is set to 0 by an error
-    if ($uploadOk == 0) {
-        echo "<div class='alert alert-danger'>Sorry, your file was not uploaded.</div>";
-    } else {
-        // if everything is ok, try to upload file
-        move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile);
-        if (true) {
-            // Insert new product into the database
             try {
                 $query = "INSERT INTO products SET title=:title, description=:description, price=:price, category=:category, image=:image";
                 $stmt = $con->prepare($query);
@@ -54,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $description = htmlspecialchars(strip_tags($_POST['description']));
                 $price = htmlspecialchars(strip_tags($_POST['price']));
                 $category = htmlspecialchars(strip_tags($_POST['category']));
-                $image = $targetFileData;// Save the image URL to the database
+                $image = htmlspecialchars(strip_tags($_POST['image']));
 
                 // Bind the parameters
                 $stmt->bindParam(':title', $title);
@@ -72,10 +31,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } catch (PDOException $exception) {
                 die('ERROR: ' . $exception->getMessage());
             }
-        } else {
-            echo "<div class='alert alert-danger'>Sorry, there was an error uploading your file.</div>";
-        }
-    }
 }
 
 ?>
@@ -120,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         <div class="mb-3">
             <label for="image" class="form-label">Image</label>
-            <input type="file" class="form-control" id="image" name="image" required>
+            <input type="text" class="form-control" id="image" name="image" required>
         </div>
         <button type="submit" class="btn btn-primary">Add Product</button>
     </form>
