@@ -64,7 +64,7 @@ $offset = ($page - 1) * $productsPerPage;
                     echo "<td>
                             <a href='#' class='btn btn-info'>View</a>
                             <a href='#' class='btn btn-warning'>Edit</a>
-                            <a href='#' class='btn btn-danger'>Delete</a>
+                            <a href='delete.php?id=" . $row['id'] . "' class='btn btn-danger'>Delete</a>
                           </td>";
                           
                     echo "</tr>";
