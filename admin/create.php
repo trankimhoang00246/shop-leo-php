@@ -1,6 +1,7 @@
 <?php
 // include database connection
 include '../config/database.php';
+$con = connectdb();
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

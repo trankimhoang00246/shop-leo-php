@@ -1,6 +1,7 @@
 <?php
 // include database connection
 include '../config/database.php';
+$con = connectdb();
 
 // Define the number of products per page
 $productsPerPage = 10;
