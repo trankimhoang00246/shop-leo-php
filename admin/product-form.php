@@ -1,4 +1,10 @@
 <?php
+include '../auth.php';
+requireLogin();  // Yêu cầu đăng nhập cho tất cả các trang admin
+requireAdminRole();  // Yêu cầu quyền admin (role = 0)
+?>
+
+<?php
 $query = "SELECT * FROM category";
 $stmt = $con->prepare($query);
 $stmt->execute();

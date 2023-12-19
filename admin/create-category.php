@@ -1,4 +1,10 @@
 <?php
+include '../auth.php';
+requireLogin();  // Yêu cầu đăng nhập cho tất cả các trang admin
+requireAdminRole();  // Yêu cầu quyền admin (role = 0)
+?>
+
+<?php
 include '../config/database.php';
 $con = connectdb();
 
