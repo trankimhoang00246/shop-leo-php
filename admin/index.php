@@ -58,7 +58,7 @@ $offset = ($page - 1) * $productsPerPage;
                     echo "<td>" . $row['title'] . "</td>";
                     echo "<td>" . $row['price'] . "</td>";
                     echo "<td>" . $row['category'] . "</td>";
-                    echo "<td><img src='" . $row['image'] . "' alt='Product Image' style='width: 50px; height: 50px;'></td>";
+                    echo "<td><img src='" . $row['image'] . "' alt='Product Image' style='width: auto; height: 100px;'></td>";
                     
                     // Actions column
                     echo "<td>

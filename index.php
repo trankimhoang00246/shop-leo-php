@@ -1,3 +1,37 @@
+<?php
+// include database connection
+include 'config/database.php';
+
+// Define the number of products per page
+$productsPerPage = 6;
+
+// Calculate the total number of products
+$queryTotal = "SELECT COUNT(*) as total FROM products";
+$stmtTotal = $con->prepare($queryTotal);
+$stmtTotal->execute();
+$totalProducts = $stmtTotal->fetch(PDO::FETCH_ASSOC)['total'];
+
+// Calculate the total number of pages
+$totalPages = ceil($totalProducts / $productsPerPage);
+
+// Get the current page number
+$currentpage = isset($_GET['page']) ? $_GET['page'] : 1;
+
+// Calculate the offset for the SQL query
+$offset = ($currentpage - 1) * $productsPerPage;
+
+// Select products with pagination
+$query = "SELECT * FROM products LIMIT :limit OFFSET :offset";
+$stmt = $con->prepare($query);
+$stmt->bindParam(':limit', $productsPerPage, PDO::PARAM_INT);
+$stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+$stmt->execute();
+
+// Fetch products
+$products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,6 +59,7 @@
                 <li><a href="#">Bóng đá</a>                
                     <ul>
                         <li><a href="#">Áo bóng đá</a></li>
+                        <li><a href="#">Giày bóng đá</a></li>
                         <li><a href="#">Quả bóng đá</a></li>
                         <li><a href="#">Balo</a></li>
                     </ul>
@@ -44,48 +79,23 @@
             <div class="slide"><img src="./assets/img/slides/4.jpg" width="770px" alt=""></div>
             <div class="sanpham">
                 <h1>Sản phẩm nổi bật</h1>
-                <div class="box-san-pham">
-                    <img src="./assets/img/1.jpg" alt="">
-                    <p class="ten-san-pham">Choco Therapy</p>
-                    <p class="gia">680.000đ</p>
-                    <p><img src="./assets/img/sao.jpg" width="100px" alt=""></p>
-                    <button>Mua Hàng</button>
-                </div>
-                <div class="box-san-pham">
-                    <img src="./assets/img/1.jpg" alt="">
-                    <p class="ten-san-pham">A Little Grace</p>
-                    <p class="gia">660.000 đ</p>
-                    <p><img src="./assets/img/sao.jpg" width="100px" alt=""></p>
-                    <button>Mua Hàng</button>
-                </div>
-                <div class="box-san-pham">
-                    <img src="./assets/img/1.jpg" alt="">
-                    <p class="ten-san-pham">Secret Garden </p>
-                    <p class="gia">590.000 đ</p>
-                    <p><img src="./assets/img/sao.jpg" width="100px" alt=""></p>
-                    <button>Mua Hàng</button>
-                </div>
-                <div class="box-san-pham">
-                    <img src="./assets/img/1.jpg" alt="">
-                    <p class="ten-san-pham">Choco Choco</p>
-                    <p class="gia">350.000 đ</p>
-                    <p><img src="./assets/img/sao.jpg" width="100px" alt=""></p>
-                    <button>Mua Hàng</button>
-                </div>
-                <div class="box-san-pham">
-                    <img src="./assets/img/1.jpg" alt="">
-                    <p class="ten-san-pham">Chocories</p>
-                    <p class="gia">340.000 đ</p>
-                    <p><img src="./assets/img/sao.jpg" width="100px" alt=""></p>
-                    <button>Mua Hàng</button>
-                </div>
-                <div class="box-san-pham">
-                    <img src="./assets/img/1.jpg" alt="">
-                    <p class="ten-san-pham">Cocofee</p>
-                    <p class="gia">260.000 đ</p>
-                    <p><img src="./assets/img/sao.jpg" width="100px" alt=""></p>
-                    <button>Mua Hàng</button>
-                </div>
+
+                <?php foreach ($products as $product) : ?>
+                    <div class="box-san-pham">
+                        <img src="<?php echo $product['image']; ?>" alt="">
+                        <p class="ten-san-pham"><?php echo $product['title']; ?></p>
+                        <p class="gia"><?php echo $product['price']; ?>đ</p>
+                        <p><img src="./assets/img/sao.jpg" width="100px" alt=""></p>
+                        <button>Mua Hàng</button>
+                    </div>
+                <?php endforeach; ?>
+
+            </div>
+
+            <div class="pagination">
+                <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
+                    <a href="?page=<?php echo $i; ?>" <?php echo ($i == $currentpage) ? 'class="active"' : ''; ?>><?php echo $i; ?></a>
+                <?php endfor; ?>
             </div>
         </div>
         <div class="clear">
