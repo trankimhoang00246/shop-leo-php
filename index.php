@@ -56,20 +56,22 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
         <div class="trai">
             <ul>
+
+            <?php
+            $query = "SELECT * FROM category";
+            $stmt = $con->prepare($query);
+            $stmt->execute();
+            $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            ?>
+
                 <li><a href="#">Bóng đá</a>                
                     <ul>
-                        <li><a href="#">Áo bóng đá</a></li>
-                        <li><a href="#">Giày bóng đá</a></li>
-                        <li><a href="#">Quả bóng đá</a></li>
-                        <li><a href="#">Balo</a></li>
+                        <?php foreach ($categories as $category): ?>
+                            <li><a href="<?php echo $category['name']; ?>"><?php echo $category['name']; ?></a></li>
+                        <?php endforeach; ?>
                     </ul>
                 </li>
-                <li><a href="#">Phụ kiện</a>                
-                    <ul>
-                        <li><a href="#">Găng tay thủ môn</a></a></li>
-                        <li><a href="#">Bọc ống đồng</a></li>
-                        <li><a href="#">Vớ</a></li>
-                    </ul>
+                <li><a href="#">Phụ kiện</a>           
                 </li>
                 <li><a href="#">Khác</a>    
                 </li>

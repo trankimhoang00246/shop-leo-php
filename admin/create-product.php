@@ -63,15 +63,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         <div class="mb-3">
             <label for="category" class="form-label">Category</label>
+
+            <?php
+            $query = "SELECT * FROM category";
+            $stmt = $con->prepare($query);
+            $stmt->execute();
+            $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            ?>
+
             <select class="form-select" id="category" name="category" required>
                 <option value="">Select Category</option>
-                <option value="ao">Áo bóng đá</option>
-                <option value="giay">Giày bóng đá</option>
-                <option value="bong">Quả bóng đá</option>
-                <option value="balo">Balo bóng đá</option>
-                <option value="gang">Găng tay</option>
-                <option value="boc">Bọc ống đồng</option>
-                <option value="vo">Vớ bóng đá</option>
+                <?php foreach ($categories as $category): ?>
+                    <option value="<?php echo $category['id']; ?>"><?php echo $category['name']; ?></option>
+                <?php endforeach; ?>
             </select>
         </div>
         <div class="mb-3">

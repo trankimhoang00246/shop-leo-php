@@ -25,7 +25,7 @@ $offset = ($page - 1) * $productsPerPage;
 <div class="container">
     <h2 class="mt-2 mb-2">Product List</h2>
 
-    <a href="create.php" class="btn btn-primary mt-2 mb-2">Add Products</a>
+    <a href="create-product.php" class="btn btn-primary mt-2 mb-2">Add Products</a>
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -65,7 +65,7 @@ $offset = ($page - 1) * $productsPerPage;
                     echo "<td>
                             <a href='#' class='btn btn-info'>View</a>
                             <a href='#' class='btn btn-warning'>Edit</a>
-                            <a href='delete.php?id=" . $row['id'] . "' class='btn btn-danger'>Delete</a>
+                            <a href='delete-product.php?id=" . $row['id'] . "' class='btn btn-danger'>Delete</a>
                           </td>";
                           
                     echo "</tr>";
