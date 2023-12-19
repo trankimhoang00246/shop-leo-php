@@ -58,13 +58,22 @@ $offset = ($page - 1) * $productsPerPage;
                     echo "<td>" . $row['id'] . "</td>";
                     echo "<td>" . $row['title'] . "</td>";
                     echo "<td>" . $row['price'] . "</td>";
-                    echo "<td>" . $row['category'] . "</td>";
+
+                    $categoryQuery = "SELECT name FROM category WHERE id = :category_id";
+                    $categoryStmt = $con->prepare($categoryQuery);
+                    $categoryStmt->bindParam(':category_id', $row['category']);
+                    $categoryStmt->execute();
+                    $categoryRow = $categoryStmt->fetch(PDO::FETCH_ASSOC);
+
+                    // Hiển thị tên của category trong cột
+                    echo "<td>" . $categoryRow['name'] . "</td>";
+                    //echo "<td>" . $row['category'] . "</td>";
                     echo "<td><img src='" . $row['image'] . "' alt='Product Image' style='width: auto; height: 100px;'></td>";
                     
                     // Actions column
                     echo "<td>
                             <a href='#' class='btn btn-info'>View</a>
-                            <a href='#' class='btn btn-warning'>Edit</a>
+                            <a href='edit-product.php?id=" . $row['id'] . "' class='btn btn-warning'>Edit</a>
                             <a href='delete-product.php?id=" . $row['id'] . "' class='btn btn-danger'>Delete</a>
                           </td>";
                           
