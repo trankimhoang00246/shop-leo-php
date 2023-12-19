@@ -1,6 +1,7 @@
 <?php
 // include database connection
 include '../config/database.php';
+$con = connectdb();
 
 // check if product id is set
 if(isset($_GET['id'])){
