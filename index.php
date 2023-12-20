@@ -78,7 +78,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="banner">
         </div>
         <div class="menu">
-            <a href="">Trang chủ</a>
+            <a href="index.php">Trang chủ</a>
             <a href="">Giới thiệu</a>
             <a href="">Dịch vụ</a>
             <a href="">Sản phẩm</a>
@@ -129,7 +129,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             <div class="pagination">
                 <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
-                    <a href="?page=<?php echo $i; ?>" <?php echo ($i == $currentpage) ? 'class="active"' : ''; ?>><?php echo $i; ?></a>
+                    <a href="?category=<?php echo urlencode($categoryName); ?>&page=<?php echo $i; ?>" <?php echo ($i == $currentpage) ? 'class="active"' : ''; ?>><?php echo $i; ?></a>
                 <?php endfor; ?>
             </div>
         </div>
