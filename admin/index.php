@@ -104,7 +104,6 @@ $offset = ($page - 1) * $productsPerPage;
                     
                     // Actions column
                     echo "<td>
-                            <a href='#' class='btn btn-info'>View</a>
                             <a href='edit-product.php?id=" . $row['id'] . "' class='btn btn-warning'>Edit</a>
                             <a href='delete-product.php?id=" . $row['id'] . "' class='btn btn-danger'>Delete</a>
                           </td>";

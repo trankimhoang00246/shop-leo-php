@@ -26,8 +26,10 @@
             </ul>
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a href="../method.php?act=logout" class="nav-link">Đăng xuất</a>
-                    <a href="../change-pass.php" class="nav-link">Thay đổi mật khẩu</a>
+                    <a href="../method.php?act=logout" class="nav-link">Logout</a>
+                </li>
+                <li class="nav-item">
+                    <a href="../change-pass.php" class="nav-link">Change password</a>
                 </li>
             </ul>
         </div>

@@ -55,8 +55,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <label for="name" class="form-label">Category Name:</label>
                     <input type="text" name="name" class="form-control" value="<?php echo $name; ?>" required>
                 </div>
-                <button type="submit" class="btn btn-success">Create Category</button>
+                <button type="submit" class="btn btn-primary">Create Category</button>
             </form>
+            <a href="category.php" class="btn btn-secondary mt-3">Back to Category List</a>
         </div>
     </div>
 </div>
