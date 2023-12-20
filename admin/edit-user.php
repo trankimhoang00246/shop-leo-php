@@ -103,7 +103,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
 
             <button type="submit" class="btn btn-primary">Update User</button>
-            <a href='user-list.php' class='btn btn-secondary'>Cancel</a>
+            <a href='user.php' class='btn btn-secondary'>Cancel</a>
         </form>
     </div>
     <!-- Add your JavaScript links here if needed -->
