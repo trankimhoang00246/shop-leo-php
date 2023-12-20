@@ -2,32 +2,65 @@
 include './config/database.php';
 $con = connectdb();
 
-// Define the number of products per page
-$productsPerPage = 6;
+$categoryName = isset($_GET['category']) ? urldecode($_GET['category']) : '';
 
-// Calculate the total number of products
-$queryTotal = "SELECT COUNT(*) as total FROM products";
-$stmtTotal = $con->prepare($queryTotal);
-$stmtTotal->execute();
-$totalProducts = $stmtTotal->fetch(PDO::FETCH_ASSOC)['total'];
+if ($categoryName) {
+// Truy vấn để lấy tổng số sản phẩm theo danh mục
+    $queryTotal = "SELECT COUNT(*) as total FROM products p
+                JOIN category c ON p.category = c.id
+                WHERE c.name = :categoryName";
+    $stmtTotal = $con->prepare($queryTotal);
+    $stmtTotal->bindParam(':categoryName', $categoryName);
+    $stmtTotal->execute();
+    $totalProducts = $stmtTotal->fetch(PDO::FETCH_ASSOC)['total'];
 
-// Calculate the total number of pages
-$totalPages = ceil($totalProducts / $productsPerPage);
+    // Số sản phẩm mỗi trang
+    $productsPerPage = 6;
 
-// Get the current page number
-$currentpage = isset($_GET['page']) ? $_GET['page'] : 1;
+    // Tính toán tổng số trang
+    $totalPages = ceil($totalProducts / $productsPerPage);
 
-// Calculate the offset for the SQL query
-$offset = ($currentpage - 1) * $productsPerPage;
+    // Lấy trang hiện tại từ URL, mặc định là trang 1 nếu không có
+    $currentpage = isset($_GET['page']) ? $_GET['page'] : 1;
 
-// Select products with pagination
-$query = "SELECT * FROM products LIMIT :limit OFFSET :offset";
-$stmt = $con->prepare($query);
-$stmt->bindParam(':limit', $productsPerPage, PDO::PARAM_INT);
-$stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+    // Tính offset cho truy vấn SQL
+    $offset = ($currentpage - 1) * $productsPerPage;
+
+    // Truy vấn sản phẩm theo trang
+    $query = "SELECT * FROM products p
+            JOIN category c ON p.category = c.id
+            WHERE c.name = :categoryName
+            LIMIT :limit OFFSET :offset";
+    $stmt = $con->prepare($query);
+    $stmt->bindParam(':categoryName', $categoryName);
+    $stmt->bindParam(':limit', $productsPerPage, PDO::PARAM_INT);
+    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+}else {
+    $productsPerPage = 6;
+
+    // Calculate the total number of products
+    $queryTotal = "SELECT COUNT(*) as total FROM products";
+    $stmtTotal = $con->prepare($queryTotal);
+    $stmtTotal->execute();
+    $totalProducts = $stmtTotal->fetch(PDO::FETCH_ASSOC)['total'];
+
+    // Calculate the total number of pages
+    $totalPages = ceil($totalProducts / $productsPerPage);
+
+    // Get the current page number
+    $currentpage = isset($_GET['page']) ? $_GET['page'] : 1;
+
+    // Calculate the offset for the SQL query
+    $offset = ($currentpage - 1) * $productsPerPage;
+
+    // Select products with pagination
+    $query = "SELECT * FROM products LIMIT :limit OFFSET :offset";
+    $stmt = $con->prepare($query);
+    $stmt->bindParam(':limit', $productsPerPage, PDO::PARAM_INT);
+    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+}
+
 $stmt->execute();
-
-// Fetch products
 $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
@@ -67,7 +100,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <li><a href="#">Bóng đá</a>                
                     <ul>
                         <?php foreach ($categories as $category): ?>
-                            <li><a href="<?php echo $category['name']; ?>"><?php echo $category['name']; ?></a></li>
+                            <li><a href="index.php?category=<?php echo urlencode($category['name']); ?>"><?php echo $category['name']; ?></a></li>
                         <?php endforeach; ?>
                     </ul>
                 </li>
