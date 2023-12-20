@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Navbar Example</title>
+    <title>Admin Shop Leo</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-rbs5wBOB5PbWjZ2yn8LOQQPYs2gFAFIwzCjKjoG6LZbdzRb5KAMC8pF5ICbcLjXN" crossorigin="anonymous">
 </head>
