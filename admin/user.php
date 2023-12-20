@@ -12,8 +12,16 @@ include 'navbar.php';
 include '../config/database.php';
 $con = connectdb();
 
-$query = "SELECT * FROM users";
-$stmt = $con->prepare($query);
+$searchKeyword = isset($_GET['search']) ? htmlspecialchars(strip_tags($_GET['search'])) : '';
+
+if (!empty($searchKeyword)) {
+    $query =  "SELECT * FROM users where username LIKE :searchKeyword OR email LIKE :searchKeyword";
+    $stmt = $con->prepare($query);
+    $stmt->bindValue(':searchKeyword', '%' . $searchKeyword . '%', PDO::PARAM_STR);
+} else {
+    $query = "SELECT * FROM users";
+    $stmt = $con->prepare($query);
+}
 $stmt->execute();
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -30,6 +38,13 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="container mt-5">
         <h2>User Management</h2>
         <a href="create-user.php" class="btn btn-primary mb-3">Add New User</a>
+
+        <form action="user.php" method="get" class="mb-3">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search products..." name="search">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </form>
 
         <table class="table">
             <thead>

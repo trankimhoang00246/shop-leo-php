@@ -37,6 +37,14 @@ $offset = ($page - 1) * $productsPerPage;
     <h2 class="mt-2 mb-2">Product List</h2>
 
     <a href="create-product.php" class="btn btn-primary mt-2 mb-2">Add Products</a>
+
+    <form action="index.php" method="get" class="mb-3">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search products..." name="search">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </form>
+
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -52,11 +60,24 @@ $offset = ($page - 1) * $productsPerPage;
 
         <?php
         try {
-            // select limited data based on pagination
-            $query = "SELECT * FROM products LIMIT :limit OFFSET :offset";
-            $stmt = $con->prepare($query);
-            $stmt->bindParam(':limit', $productsPerPage, PDO::PARAM_INT);
-            $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+            $searchKeyword = isset($_GET['search']) ? htmlspecialchars(strip_tags($_GET['search'])) : '';
+
+            // Nếu có từ khóa tìm kiếm, thêm điều kiện vào truy vấn SQL
+            if (!empty($searchKeyword)) {
+                $query =  "SELECT p.* FROM products p JOIN category c ON p.category = c.id WHERE 
+                p.title LIKE CONCAT('%', :searchKeyword, '%') 
+                OR c.name LIKE CONCAT('%', :searchKeyword, '%')
+                OR p.price LIKE CONCAT('%', :searchKeyword, '%')";
+
+                $stmt = $con->prepare($query);
+                $stmt->bindValue(':searchKeyword', '%' . $searchKeyword . '%', PDO::PARAM_STR);
+            } else {
+                // Nếu không có từ khóa tìm kiếm, truy vấn toàn bộ dữ liệu
+                $query = "SELECT * FROM products LIMIT :limit OFFSET :offset";
+                $stmt = $con->prepare($query);
+                $stmt->bindParam(':limit', $productsPerPage, PDO::PARAM_INT);
+                $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+            }
             $stmt->execute();
 
             // fetch all rows as associative array

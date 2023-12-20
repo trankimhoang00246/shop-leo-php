@@ -12,9 +12,16 @@ include 'navbar.php';
 include '../config/database.php';
 $con = connectdb();
 
-// Query to retrieve categories
-$query = "SELECT * FROM category";
-$stmt = $con->prepare($query);
+$searchKeyword = isset($_GET['search']) ? htmlspecialchars(strip_tags($_GET['search'])) : '';
+
+if (!empty($searchKeyword)) {
+    $query = "SELECT * FROM category WHERE name LIKE :searchKeyword";
+    $stmt = $con->prepare($query);
+    $stmt->bindValue(':searchKeyword', '%' . $searchKeyword . '%', PDO::PARAM_STR);
+} else {
+    $query = "SELECT * FROM category";
+    $stmt = $con->prepare($query);
+}
 $stmt->execute();
 $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -35,6 +42,13 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="col-md-12">
             <h2>Category Management</h2>
             <a href="create-category.php" class="btn btn-primary mb-3">Add New Category</a>
+
+            <form action="category.php" method="get" class="mb-3">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search products..." name="search">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </form>
 
             <table class="table">
                 <thead>
